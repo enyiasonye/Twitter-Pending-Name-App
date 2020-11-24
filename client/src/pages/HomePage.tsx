@@ -11,7 +11,7 @@ const HomePage = () => {
   return (
     <div>
       {!authenticated ? (
-        <h1>Welcome!</h1>
+        <h1></h1>
       ) : (
         <div>
           <h1>You have login succcessfully!</h1>

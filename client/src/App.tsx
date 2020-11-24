@@ -6,8 +6,8 @@ import NavBar from './components/NavBar';
 import styled from 'styled-components';
 
 const AppContainer = styled.div`
-  padding-left: 2rem;
-  padding-right: 2rem;
+  /* padding-left: 2rem; */
+  /* padding-right: 2rem; */
 `;
 
 function App() {
