@@ -8,8 +8,8 @@ import { useDispatch } from 'react-redux';
 import { authenticateUser } from './store/thunks/userThunks';
 
 const AppContainer = styled.div`
-  padding-left: 2rem;
-  padding-right: 2rem;
+  /* padding-left: 2rem; */
+  /* padding-right: 2rem; */
 `;
 
 function App() {
