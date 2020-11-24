@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import NavBar from './components/NavBar';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { authenticateUser } from './store/thunks/userThunks';
 
 const AppContainer = styled.div`
   padding-left: 2rem;
@@ -11,9 +13,11 @@ const AppContainer = styled.div`
 `;
 
 function App() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    console.log('app started');
-  }, []);
+    dispatch(authenticateUser());
+  }, [dispatch]);
 
   return (
     <>
