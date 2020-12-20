@@ -1,4 +1,4 @@
-const colors = require('tailwindcss/colors')
+const colors = require('tailwindcss/colors');
 
 module.exports = {
   purge: [],
@@ -27,12 +27,15 @@ module.exports = {
         purple: colors.purple,
         fuchsia: colors.fuchsia,
         pink: colors.pink,
-        rose: colors.rose
-      }
+        rose: colors.rose,
+      },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      ringWidth: ['focus-visible'],
+      ringColor: ['focus-visible'],
+    },
   },
   plugins: [],
-}
+};

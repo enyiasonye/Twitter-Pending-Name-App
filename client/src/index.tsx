@@ -6,12 +6,18 @@ import 'antd/dist/antd.css';
 import './styles/tailwind.css';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
+import { startListeningToAuthChanges } from './store/thunks/authThunks';
 import store from './store/store';
+import { BrowserRouter as Router } from 'react-router-dom';
+
+store.dispatch(startListeningToAuthChanges());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

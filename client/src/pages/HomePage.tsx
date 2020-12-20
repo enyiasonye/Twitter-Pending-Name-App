@@ -1,23 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 const HomePage = () => {
-  const [user, setUser] = useState(null);
-  const [authError, setAuthError] = useState(null);
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // authenticateUser(setUser, setAuthenticated, setAuthError);
-  }, []);
   return (
     <div>
-      {!authenticated ? (
-        <h1></h1>
-      ) : (
-        <div>
-          <h1>You have login succcessfully!</h1>
-          <h2>Welcome {user}!</h2>
-        </div>
-      )}
+      <h1>YESH</h1>
     </div>
   );
 };

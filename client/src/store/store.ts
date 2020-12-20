@@ -1,10 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit';
-import userSlice from './slices/userSlice';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import authSlice from './slices/authSlice';
+import tweetSlice from './slices/tweetSlice';
 
 const store = configureStore({
   reducer: {
-    user: userSlice,
+    auth: authSlice,
+    tweets: tweetSlice,
   },
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: ['auth/listenToAuthChanges/fulfilled'],
+    },
+  }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
