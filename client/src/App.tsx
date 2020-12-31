@@ -5,14 +5,18 @@ import HomePage from './pages/HomePage';
 import NavBar from './components/NavBar';
 import styled from 'styled-components';
 import { RootState } from './store/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './pages/Dashboard';
 import Pricing from './pages/Pricing';
+import { getTokenAndSecret } from './store/thunks/authThunks';
+import AccountPage from './pages/AccountPage';
+import SideBar from './components/SideBar';
 
 const AppContainer = styled.div`
-  /* padding-left: 2rem; */
-  /* padding-right: 2rem; */
+  display: flex;
+  flex-direction: ${(props: { currentUser: boolean }) =>
+    props.currentUser ? 'row' : 'column'};
 `;
 
 // @ts-ignore
@@ -21,11 +25,16 @@ const App = () => {
     (state: RootState) => state.auth.applicationLoading,
   );
   const history = useHistory();
+  const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.auth.userProfile);
 
   // use loggingIn and storedUser so that loading only happens when logging in or already logged in
   const storedUser = localStorage.getItem('user');
   const loggingIn = localStorage.getItem('loggingIn');
+
+  useEffect(() => {
+    dispatch(getTokenAndSecret());
+  }, [dispatch]);
 
   // redirect to dashboard on initial log in
   useEffect(() => {
@@ -36,29 +45,30 @@ const App = () => {
   }, [currentUser]);
   return (
     <>
-      <AppContainer>
-        {(loggingIn || storedUser) && isLoading ? (
-          <div>Loading</div>
-        ) : (
-          <>
-            <NavBar />
-            <Switch>
-              <Route exact path="/">
-                <HomePage />
-              </Route>
-              <Route exact path="/pricing">
-                <Pricing />
-              </Route>
-              <PrivateRoute path="/dashboard">
-                <Dashboard />
-              </PrivateRoute>
-              <Route path="*">
-                <NotFoundPage />
-              </Route>
-            </Switch>
-          </>
-        )}
-      </AppContainer>
+      {(loggingIn || storedUser) && isLoading ? (
+        <div>Loading</div>
+      ) : (
+        <AppContainer currentUser={currentUser !== null}>
+          {currentUser ? <SideBar /> : <NavBar />}
+          <Switch>
+            <Route exact path="/">
+              <HomePage />
+            </Route>
+            <Route exact path="/pricing">
+              <Pricing />
+            </Route>
+            <PrivateRoute path="/dashboard">
+              <Dashboard />
+            </PrivateRoute>
+            <PrivateRoute path="/account">
+              <AccountPage />
+            </PrivateRoute>
+            <Route path="*">
+              <NotFoundPage />
+            </Route>
+          </Switch>
+        </AppContainer>
+      )}
     </>
   );
 };

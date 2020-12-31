@@ -38,9 +38,8 @@ const authSlice = createSlice({
       state.userProfile = null;
       state.applicationLoading = false;
     });
-    builder.addCase(signIn.fulfilled, (state, action) => {
-      console.log('yeet', action);
-    });
+    // builder.addCase(signIn.fulfilled, (state, action) => {
+    // });
   },
 });
 

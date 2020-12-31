@@ -68,14 +68,27 @@ const NavBar = () => {
             Pricing
           </button>
           {currentUser ? (
-            <button
-              className={`text-lg font-semibold hover:text-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg leading-10 px-4`}
-              onClick={(e) => {
-                dispatch(signOut());
-              }}
-            >
-              Sign Out
-            </button>
+            <>
+              <button
+                className={`text-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 hover:text-emerald-500 rounded-lg leading-10 px-2 ${
+                  pathname.includes('pricing') &&
+                  'bg-emerald-50 text-emerald-500'
+                }`}
+                onClick={() => {
+                  history.push('/account');
+                }}
+              >
+                Account
+              </button>
+              <button
+                className={`text-lg font-semibold hover:text-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg leading-10 px-2`}
+                onClick={(e) => {
+                  dispatch(signOut());
+                }}
+              >
+                Sign Out
+              </button>
+            </>
           ) : (
             <button
               className={`text-lg font-semibold hover:text-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg leading-10 px-4`}
@@ -101,16 +114,30 @@ const NavBar = () => {
             Pricing
           </button>
           {currentUser ? (
-            <button
-              className={`text-lg font-semibold hover:text-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg leading-10 px-4 ${
-                pathname.includes('signin') && 'bg-emerald-50 text-emerald-500'
-              }`}
-              onClick={(e) => {
-                dispatch(signOut());
-              }}
-            >
-              Sign Out
-            </button>
+            <>
+              <button
+                className={`text-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 hover:text-emerald-500 rounded-lg leading-10 px-2 ${
+                  pathname.includes('pricing') &&
+                  'bg-emerald-50 text-emerald-500'
+                }`}
+                onClick={() => {
+                  history.push('/account');
+                }}
+              >
+                Account
+              </button>
+              <button
+                className={`text-lg font-semibold hover:text-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg leading-10 px-2 ${
+                  pathname.includes('signin') &&
+                  'bg-emerald-50 text-emerald-500'
+                }`}
+                onClick={(e) => {
+                  dispatch(signOut());
+                }}
+              >
+                Sign Out
+              </button>
+            </>
           ) : (
             <button
               className={`text-lg font-semibold hover:text-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg leading-10 px-4 ${

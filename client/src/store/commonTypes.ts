@@ -1,3 +1,6 @@
+// TYPESCRIPT TYPES
+export type Maybe<T> = T | null;
+
 // USER RELATED TYPES
 
 export enum UserStatuses {
@@ -7,9 +10,9 @@ export enum UserStatuses {
 
 export interface UserProfile {
   status: UserStatuses;
-  displayName: String | null;
-  uid: String | null;
-  profileImageUrl: String | null;
+  displayName: string | null;
+  uid: string;
+  profileImageUrl: string | null;
 }
 
 // TWEET RELATED TYPES
@@ -29,6 +32,14 @@ export interface FollowupTweet {
 
 export interface ScheduledTweet {
   id: string;
+  userId: String;
+  content: string[];
+  scheduledTime: string;
+  followupTweets: FollowupTweet[];
+}
+
+export interface ScheduledTweetPayload {
+  userId: String;
   content: string[];
   scheduledTime: string;
   followupTweets: FollowupTweet[];

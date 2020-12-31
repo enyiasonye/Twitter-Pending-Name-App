@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ScheduledTweet, TagType } from '../commonTypes';
 
 interface TweetSliceState {
@@ -15,6 +15,7 @@ const initialState: TweetSliceState = {
   scheduledTweets: [
     {
       id: '1',
+      userId: 'UHOWWoJj2wXwemEepfO6EsQGI112',
       content: [
         `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque lobortis bibendum leo. 
         Aliquam vulputate nulla ornare dolor lacinia, pulvinar consectetur tellus accumsan. 
@@ -29,6 +30,7 @@ const initialState: TweetSliceState = {
     },
     {
       id: '2',
+      userId: 'UHOWWoJj2wXwemEepfO6EsQGI112',
       content: ['This is a much shorter tweet that can still have followups'],
       scheduledTime: tomorrow.toString(),
       followupTweets: [
@@ -44,6 +46,7 @@ const initialState: TweetSliceState = {
     },
     {
       id: '3',
+      userId: 'UHOWWoJj2wXwemEepfO6EsQGI112',
       content: ['This is a third tweet that is further in the future'],
       scheduledTime: furtherDay.toString(),
       followupTweets: [],
@@ -55,16 +58,11 @@ const tweetSlice = createSlice({
   name: 'tweets',
   initialState,
   reducers: {
-    // setLoggedIn(state: AuthSliceState, action: PayloadAction<UserProfile>) {
-    //   state.userProfile = action.payload;
-    // },
-    // setLoggedOut(state: AuthSliceState) {
-    //   state.userProfile = {
-    //     status: UserStatuses.ANONYMOUS,
-    //     displayName: null,
-    //     uid: null,
-    //     profileImageUrl: null,
-    //   };
+    // updateTweetDraft(
+    //   state: TweetSliceState,
+    //   action: PayloadAction<ScheduledTweetPayload>,
+    // ) {
+    //   state.draftTweet = action.payload;
     // },
   },
   //   extraReducers: (builder) => {
@@ -77,10 +75,9 @@ const tweetSlice = createSlice({
   //       state.applicationLoading = false;
   //     });
   //     builder.addCase(signIn.fulfilled, (state, action) => {
-  //       console.log('yeet', action);
   //     });
   //   },
 });
 
-// export const { setLoggedIn, setLoggedOut } = authSlice.actions;
+// export const { updateTweetDraft } = tweetSlice.actions;
 export default tweetSlice.reducer;
