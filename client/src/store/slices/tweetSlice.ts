@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ScheduledTweet, TagType } from '../commonTypes';
+import { ScheduledTweet, ScheduledTweetPayload, TagType } from '../commonTypes';
 
 interface TweetSliceState {
   scheduledTweets: ScheduledTweet[];
@@ -58,12 +58,10 @@ const tweetSlice = createSlice({
   name: 'tweets',
   initialState,
   reducers: {
-    // updateTweetDraft(
-    //   state: TweetSliceState,
-    //   action: PayloadAction<ScheduledTweetPayload>,
-    // ) {
-    //   state.draftTweet = action.payload;
-    // },
+    scheduleTweet(
+      state: TweetSliceState,
+      action: PayloadAction<ScheduledTweetPayload>,
+    ) {},
   },
   //   extraReducers: (builder) => {
   //     builder.addCase(setLoggedIn, (state, action) => {

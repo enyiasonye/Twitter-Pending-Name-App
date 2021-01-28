@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Modal, Input, Tooltip, Button } from 'antd';
+import { Modal, Input, Tooltip, Button, DatePicker } from 'antd';
+import { v4 as uuidv4 } from 'uuid';
 import 'emoji-mart/css/emoji-mart.css';
 import {
   SmileOutlined,
@@ -10,8 +11,10 @@ import {
 } from '@ant-design/icons';
 import { Picker } from 'emoji-mart';
 import { useDispatch, useSelector } from 'react-redux';
-import { postNow } from '../store/thunks/tweetThunk';
+import { postNow, queueTweet } from '../store/thunks/tweetThunk';
 import { RootState } from '../store/store';
+import PrimaryButton from './PrimaryButton';
+import { isThePast } from '../utils';
 const { TextArea } = Input;
 
 // @ts-ignore
@@ -37,6 +40,18 @@ const useOutsideAlerter = (ref, setOpenEmojiIndex) => {
   }, [ref]);
 };
 
+const getTextColor = (count: number) => {
+  // yellow at 230 characters,
+  // Red at 280+
+  if (count >= 230 && count <= 280) {
+    return 'text-yellow-500';
+  } else if (count > 280) {
+    return 'text-red-500';
+  } else {
+    return 'text-black';
+  }
+};
+
 interface ScheduleTweetModalProps {
   isOpen: boolean;
   handleClose: () => void;
@@ -47,23 +62,45 @@ const ScheduleTweetModal: React.FC<ScheduleTweetModalProps> = ({
   handleClose,
 }) => {
   const [textValues, setTextValues] = useState(['']);
-  const [textValueLength, setTextValueLength] = useState([0]);
+  const [showPastError, setShowPastError] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState<null | number>(null);
   const [openEmojiIndex, setOpenEmojiIndex] = useState<null | number>(null);
+  const [scheduledTime, setScheduledTime] = useState<moment.Moment | null>(
+    null,
+  );
+
+  // handle changes in scheduled time
+  useEffect(() => {
+    if (scheduledTime) {
+      const currentScheduledTime = scheduledTime?.toDate();
+      if (isThePast(currentScheduledTime)) {
+        setShowPastError(true);
+      } else {
+        setShowPastError(false);
+      }
+    } else {
+      setShowPastError(false);
+    }
+  }, [scheduledTime]);
+
+  // handle generating new blocks of text
+  useEffect(() => {
+    console.log(focusedIndex);
+    // find any that have greater than 280 characters
+    if (focusedIndex) {
+      if (textValues[focusedIndex].length > 280) {
+      }
+    }
+  }, [focusedIndex, textValues]);
+
   const dispatch = useDispatch();
+
   const user = useSelector((state: RootState) => state.auth.userProfile);
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, setOpenEmojiIndex);
 
   const handleTextChange = (value: string, index: number) => {
     setTextValues(Object.assign([...textValues], { [index]: value }));
-  };
-
-  const handleTextLengthChange = (value: string, index: number) => {
-    setTextValueLength(
-      Object.assign([...textValueLength], {
-        [index]: value.length,
-      }),
-    );
   };
 
   const handleEmojiButtonClick = (index: number) => {
@@ -82,13 +119,18 @@ const ScheduleTweetModal: React.FC<ScheduleTweetModalProps> = ({
       footer={[
         <Button
           className="hover:text-emerald-500 hover:border-emerald-500 focus:border-emerald-600"
+          disabled={textValues[0] === ''}
           onClick={() => {
             dispatch(
               postNow({
+                id: uuidv4(),
                 userId: user!.uid,
                 content: textValues,
-                scheduledTime: '',
+                timezone: user!.settings!.timezone,
+                localScheduledTime: new Date().toString(),
+                utcScheduledTime: new Date().toUTCString(),
                 followupTweets: [],
+                posted: true,
               }),
             );
             handleClose();
@@ -96,13 +138,29 @@ const ScheduleTweetModal: React.FC<ScheduleTweetModalProps> = ({
         >
           Post Now
         </Button>,
-        <Button
-          type="primary"
-          className="bg-emerald-600 border-emerald-600 hover:bg-emerald-500 hover:border-emerald-500 focus:bg-emerald-600 focus:border-emerald-600"
-          onClick={() => {}}
+        <PrimaryButton
+          disabled={
+            scheduledTime === null || textValues[0] === '' || showPastError
+          }
+          onClick={() => {
+            scheduledTime !== null &&
+              dispatch(
+                queueTweet({
+                  id: uuidv4(),
+                  userId: user!.uid,
+                  content: textValues,
+                  timezone: user!.settings!.timezone,
+                  localScheduledTime: scheduledTime?.toDate().toString(),
+                  utcScheduledTime: scheduledTime.toDate().toUTCString(),
+                  followupTweets: [],
+                  posted: false,
+                }),
+              );
+            handleClose();
+          }}
         >
           Queue Tweet
-        </Button>,
+        </PrimaryButton>,
       ]}
     >
       <div>
@@ -112,9 +170,11 @@ const ScheduleTweetModal: React.FC<ScheduleTweetModalProps> = ({
               rows={4}
               bordered={false}
               className="resize-none"
+              onClick={() => {
+                setFocusedIndex(index);
+              }}
               onChange={(e) => {
                 handleTextChange(e.target.value, index);
-                handleTextLengthChange(e.target.value, index);
               }}
               placeholder={
                 index === 0
@@ -147,7 +207,9 @@ const ScheduleTweetModal: React.FC<ScheduleTweetModalProps> = ({
                 </Tooltip>
               </div>
               <div className="flex items-baseline">
-                <div>{textValueLength[index]}</div>
+                <div className={`${getTextColor(textValues[index].length)}`}>
+                  {textValues[index].length}
+                </div>
                 {textValues.length > 1 && (
                   <Tooltip title="Remove tweet">
                     <MinusOutlined
@@ -156,9 +218,7 @@ const ScheduleTweetModal: React.FC<ScheduleTweetModalProps> = ({
                         setTextValues(
                           textValues.filter((val, idx) => idx !== index),
                         );
-                        setTextValueLength(
-                          textValueLength.filter((val, idx) => idx !== index),
-                        );
+                        if (index > 0) setFocusedIndex(index - 1);
                       }}
                     />
                   </Tooltip>
@@ -168,7 +228,6 @@ const ScheduleTweetModal: React.FC<ScheduleTweetModalProps> = ({
                     className="hover:text-emerald-500 cursor-pointer relative text-lg pl-2"
                     onClick={() => {
                       setTextValues([...textValues, '']);
-                      setTextValueLength([...textValueLength, 0]);
                     }}
                   />
                 </Tooltip>
@@ -198,6 +257,23 @@ const ScheduleTweetModal: React.FC<ScheduleTweetModalProps> = ({
             )}
           </div>
         ))}
+        <div className="flex justify-between">
+          <div>Scheduled Time</div>
+          <div className="flex flex-col">
+            <DatePicker
+              showNow={false}
+              size="small"
+              showTime={{ use12Hours: true }}
+              format="YYYY-MM-DD h:mm"
+              onChange={(value) => setScheduledTime(value)}
+            />
+            {showPastError && (
+              <span className="self-end text-red-600">
+                This time is in the past
+              </span>
+            )}
+          </div>
+        </div>
       </div>
     </Modal>
   );

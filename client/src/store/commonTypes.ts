@@ -3,16 +3,15 @@ export type Maybe<T> = T | null;
 
 // USER RELATED TYPES
 
-export enum UserStatuses {
-  ANONYMOUS = 'ANONYMOUS',
-  SIGNED_IN = 'SIGNED_IN',
+export interface UserSettings {
+  timezone: string;
 }
 
 export interface UserProfile {
-  status: UserStatuses;
-  displayName: string | null;
+  displayName: Maybe<string>;
   uid: string;
-  profileImageUrl: string | null;
+  profileImageUrl: Maybe<string>;
+  settings: Maybe<UserSettings>;
 }
 
 // TWEET RELATED TYPES
@@ -39,8 +38,12 @@ export interface ScheduledTweet {
 }
 
 export interface ScheduledTweetPayload {
+  id: string;
   userId: String;
   content: string[];
-  scheduledTime: string;
+  localScheduledTime: string;
+  utcScheduledTime: string;
+  posted: boolean;
+  timezone: string;
   followupTweets: FollowupTweet[];
 }

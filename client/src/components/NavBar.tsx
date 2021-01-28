@@ -82,7 +82,7 @@ const NavBar = () => {
               </button>
               <button
                 className={`text-lg font-semibold hover:text-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg leading-10 px-2`}
-                onClick={(e) => {
+                onClick={() => {
                   dispatch(signOut());
                 }}
               >

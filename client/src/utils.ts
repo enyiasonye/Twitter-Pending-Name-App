@@ -1,10 +1,18 @@
 import { format } from 'date-fns';
 import { ScheduledTweet } from './store/commonTypes';
 
+// TIME UTILS
+
 // Takes in a date and returns a string in the format H:MM PM
 export const extractConvertedTime = (time: string) => {
   const convertedTime = new Date(time);
   return format(convertedTime, 'p');
+};
+
+// takes in a date and returns a boolean for whether it's in the past
+export const isThePast = (selectedTime: Date) => {
+  const now = new Date();
+  return selectedTime < now;
 };
 
 export const isToday = (time: string) => {
@@ -77,3 +85,9 @@ export const categorizeTweetSchedule = (tweets: ScheduledTweet[]) => {
   });
   return organizedTweets;
 };
+
+// ENV UTILS
+export const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'replace_this'
+    : 'http://localhost:5001/tweethresh/us-central1/app';

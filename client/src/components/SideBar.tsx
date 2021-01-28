@@ -1,39 +1,45 @@
 import {
   CalendarOutlined,
   DownOutlined,
+  LogoutOutlined,
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu } from 'antd';
-import React, { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-
-const menu = (
-  <Menu>
-    <Menu.Item className="flex items-center">
-      <SettingOutlined />
-      <Link to="/account">Settings</Link>
-    </Menu.Item>
-    {/* <Menu.Item>
-      <div>Post Now</div>
-    </Menu.Item>
-    <Menu.Item>
-      <div>Delete</div>
-    </Menu.Item> */}
-  </Menu>
-);
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { signOut } from '../store/thunks/authThunks';
 
 const SideBar = () => {
   const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(location);
-  }, [location]);
+  const menu = (
+    <Menu>
+      <Menu.Item
+        onClick={() => history.push('/account')}
+        className="flex items-center"
+      >
+        <SettingOutlined />
+        <div>Settings</div>
+      </Menu.Item>
+      <Menu.Item
+        onClick={() => dispatch(signOut())}
+        className="flex items-center"
+      >
+        <LogoutOutlined />
+        <div>Sign Out</div>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <div className="relative bg-white">
       <div className="flex flex-col sm:flex-row sm:justify-around">
         <div className="w-72 h-screen">
-          <div className="mx-6 mt-10">
+          <div className="mx-6 mt-4">
             <Link
               className="hover:text-black font-bold text-3xl"
               to="/dashboard"

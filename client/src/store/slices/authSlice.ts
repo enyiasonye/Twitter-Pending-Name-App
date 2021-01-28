@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setLoggedIn, setLoggedOut } from '../actions/authActions';
-import { UserProfile } from '../commonTypes';
-import { signIn } from '../thunks/authThunks';
+import { UserProfile, UserSettings } from '../commonTypes';
 
 interface AuthSliceState {
   userProfile: UserProfile | null;
@@ -17,17 +16,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    // setLoggedIn(state: AuthSliceState, action: PayloadAction<UserProfile>) {
-    //   state.userProfile = action.payload;
-    // },
-    // setLoggedOut(state: AuthSliceState) {
-    //   state.userProfile = {
-    //     status: UserStatuses.ANONYMOUS,
-    //     displayName: null,
-    //     uid: null,
-    //     profileImageUrl: null,
-    //   };
-    // },
+    setSettings(state: AuthSliceState, action: PayloadAction<UserSettings>) {
+      if (state.userProfile?.settings)
+        state.userProfile.settings = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(setLoggedIn, (state, action) => {
@@ -38,10 +30,8 @@ const authSlice = createSlice({
       state.userProfile = null;
       state.applicationLoading = false;
     });
-    // builder.addCase(signIn.fulfilled, (state, action) => {
-    // });
   },
 });
 
-// export const { setLoggedIn, setLoggedOut } = authSlice.actions;
+export const { setSettings } = authSlice.actions;
 export default authSlice.reducer;
