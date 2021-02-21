@@ -13,6 +13,7 @@
     "date-fns": "^2.16.1",
     "emoji-mart": "^3.0.0",
     "firebase": "^8.1.1",
+    "immer": "^8.0.1",
     "lodash": "^4.17.20",
     "postcss": "^8.1.10",
     "postcss-cli": "^8.3.0",
@@ -24,6 +25,7 @@
     "react-timezone-select": "^0.9.9",
     "redux": "^4.0.5",
     "styled-components": "^5.2.1",
+    "use-immer": "^0.4.2",
     "uuid": "^8.3.2",
     "web-vitals": "^0.2.4"
   },

@@ -1,5 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
+
 // this is to secure it when its on github, you'll need to secure it
 // differently when you build the app and actually deploy
 
@@ -20,4 +22,7 @@ const config = {
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();
+const db = firebase.firestore();
+export const userRef = db.collection('users');
+export const tweetRef = db.collection('tweets');
 export const twitterAuthProvider = new firebase.auth.TwitterAuthProvider();

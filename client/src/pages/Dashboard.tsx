@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import TweetCard from '../components/TweetCard';
 import { RootState } from '../store/store';
 import { categorizeTweetSchedule } from '../utils';
-import ScheduleTweetModal from '../components/ScheduleTweetModal';
+import ScheduleTweetModal from '../components/ScheduleTweetModal/ScheduleTweetModal';
 import PrimaryButton from '../components/PrimaryButton';
 
 const Dashboard = () => {
