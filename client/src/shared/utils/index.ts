@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { ScheduledTweet } from './store/commonTypes';
+import { ScheduledTweet } from '../../store/commonTypes';
 
 // TIME UTILS
 

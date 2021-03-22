@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag, Dropdown, Button, Menu } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
-import { TagType } from '../store/commonTypes';
+import { TagType } from '../../../store/commonTypes';
 
 export interface FollowupTweetCardProps {
   tags: { type: TagType; value: string }[];

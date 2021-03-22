@@ -3,12 +3,12 @@ import { Modal, Button, DatePicker } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import 'emoji-mart/css/emoji-mart.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { postNow, queueTweet } from '../../store/thunks/tweetThunk';
-import { RootState } from '../../store/store';
+import { postNow, queueTweet } from '../../../store/thunks/tweetThunk';
+import { RootState } from '../../../store/store';
 import PrimaryButton from '../PrimaryButton';
 import { isThePast } from '../../utils';
 import { useImmer } from 'use-immer';
-import ModalTextArea from './ModalTextArea';
+import ModalTextArea from './components/ModalTextArea';
 
 interface ScheduleTweetModalProps {
   isOpen: boolean;

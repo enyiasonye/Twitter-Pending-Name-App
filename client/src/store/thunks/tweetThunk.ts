@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { tweetRef } from '../../firebaseConfig';
-import { BASE_URL } from '../../utils';
+import { BASE_URL } from '../../shared/utils';
 import { ScheduledTweetPayload } from '../commonTypes';
 
 export const postNow = createAsyncThunk(

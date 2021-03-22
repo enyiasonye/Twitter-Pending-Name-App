@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Tag, Dropdown, Button, Menu } from 'antd';
 import { MoreOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
-import { FollowupTweet } from '../store/commonTypes';
-import FollowupTweetCard from './FollowupTweetCard';
-import { extractConvertedTime } from '../utils';
+import { FollowupTweet } from '../../../store/commonTypes';
+import FollowupTweetCard from '../FollowupTweetCard';
+import { extractConvertedTime } from '../../utils';
 
 export interface TweetCardProps {
   scheduledTime: string;

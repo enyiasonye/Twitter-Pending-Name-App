@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, ChangeEvent } from 'react';
 import { Input, Tooltip } from 'antd';
 import {
   SmileOutlined,
@@ -9,6 +9,8 @@ import {
 } from '@ant-design/icons';
 import { Picker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
+import { useImmer } from 'use-immer';
+import UploadItem from './UploadItem';
 
 const { TextArea } = Input;
 
@@ -67,11 +69,23 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
   handlePlusClick,
 }) => {
   const [isEmojiOpen, setIsEmojiOpen] = useState(false);
+  const [files, setFiles] = useImmer<File[]>([]);
 
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useOutsideAlerter(wrapperRef, setIsEmojiOpen);
+
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      Array.from(e.target.files).forEach((file) => {
+        setFiles((draft) => {
+          draft.push(file);
+        });
+      });
+      console.log(e.target.files);
+    }
+  };
 
   return (
     <div className="border-gray-300 border rounded-md focus-within:border-emerald-400 mb-4">
@@ -92,7 +106,15 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
         }
         value={value}
       />
-      TEST
+      <div className="p-1.5">
+        {files.map((file) => (
+          <UploadItem
+            placeholderText="Image description"
+            file={file}
+            handleDelete={() => {}}
+          />
+        ))}
+      </div>
       <div className="p-2 flex justify-between">
         <div className="flex items-center">
           <Tooltip title="Add emoji">
@@ -113,6 +135,8 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
             <input
               className="hidden"
               type="file"
+              multiple
+              onChange={handleFileUpload}
               ref={hiddenInputRef}
               accept="image/*"
             />

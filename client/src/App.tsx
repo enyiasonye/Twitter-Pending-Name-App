@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import NotFoundPage from './pages/NotFoundPage';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import NavBar from './components/NavBar';
+import NavBar from './shared/components/NavBar';
 import styled from 'styled-components';
 import { RootState } from './store/store';
 import { useDispatch, useSelector } from 'react-redux';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './shared/components/PrivateRoute';
 import Dashboard from './pages/Dashboard';
 import Pricing from './pages/Pricing';
 import { getTokenAndSecret } from './store/thunks/authThunks';
+import SideBar from './shared/components/SideBar';
 import AccountPage from './pages/AccountPage';
-import SideBar from './components/SideBar';
 
 const AppContainer = styled.div`
   display: flex;

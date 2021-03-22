@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import TweetCard from '../components/TweetCard';
-import { RootState } from '../store/store';
-import { categorizeTweetSchedule } from '../utils';
-import ScheduleTweetModal from '../components/ScheduleTweetModal/ScheduleTweetModal';
-import PrimaryButton from '../components/PrimaryButton';
+import TweetCard from '../../shared/components/TweetCard';
+import { RootState } from '../../store/store';
+import { categorizeTweetSchedule } from '../../shared/utils';
+import ScheduleTweetModal from '../../shared/components/ScheduleTweetModal';
+import PrimaryButton from '../../shared/components/PrimaryButton';
 
 const Dashboard = () => {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);

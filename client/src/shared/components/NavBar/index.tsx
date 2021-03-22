@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { RootState } from '../store/store';
-import { signIn, signOut } from '../store/thunks/authThunks';
+import { RootState } from '../../../store/store';
+import { signIn, signOut } from '../../../store/thunks/authThunks';
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);

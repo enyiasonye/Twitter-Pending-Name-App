@@ -9,7 +9,7 @@ import { Button, Dropdown, Menu } from 'antd';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { signOut } from '../store/thunks/authThunks';
+import { signOut } from '../../../store/thunks/authThunks';
 
 const SideBar = () => {
   const location = useLocation();

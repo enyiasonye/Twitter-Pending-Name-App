@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 // @ts-ignore
 import TimezoneSelect from 'react-timezone-select';
 import styled from 'styled-components';
-import PrimaryButton from '../components/PrimaryButton';
-import { UserSettings } from '../store/commonTypes';
-import { RootState } from '../store/store';
+import PrimaryButton from '../../shared/components/PrimaryButton';
+import { UserSettings } from '../../store/commonTypes';
+import { RootState } from '../../store/store';
 import isEqual from 'lodash/isEqual';
-import { updateSettings } from '../store/thunks/userThunk';
+import { updateSettings } from '../../store/thunks/userThunk';
 
 const StyledContainer = styled.div`
   width: 50rem;
