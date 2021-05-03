@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import TweetCard from '../../shared/components/TweetCard';
-import { RootState } from '../../store/store';
+import { RootState, useAppDispatch } from '../../store/store';
 import { categorizeTweetSchedule } from '../../shared/utils';
 import ScheduleTweetModal from '../../shared/components/ScheduleTweetModal';
 import PrimaryButton from '../../shared/components/PrimaryButton';
+import { updateCurrentDraft } from '../../store/slices/tweetSlice';
+import { v4 as uuidv4 } from 'uuid';
 
 const Dashboard = () => {
+  const dispatch = useAppDispatch();
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
-  const handleScheduleModalClose = () => setScheduleModalOpen(false);
+
   const tweets = useSelector(
     (state: RootState) => state.tweets.scheduledTweets,
   );
+  const currentDraft = useSelector(
+    (state: RootState) => state.tweets.currentDraft,
+  );
+  const currentUser = useSelector((state: RootState) => state.auth.userProfile);
+
+  const handleScheduleModalClose = () => setScheduleModalOpen(false);
   const categorizedTweets = categorizeTweetSchedule(tweets);
+
   return (
     <div>
       <div className="mx-12 mt-4">
@@ -21,6 +31,19 @@ const Dashboard = () => {
           <PrimaryButton
             size="large"
             onClick={() => {
+              currentDraft === null &&
+                currentUser &&
+                dispatch(
+                  updateCurrentDraft({
+                    id: uuidv4(),
+                    userId: currentUser.uid,
+                    content: [],
+                    localScheduledTime: new Date().toString(),
+                    utcScheduledTime: new Date().toUTCString(),
+                    followupTweets: [],
+                    posted: false,
+                  }),
+                );
               setScheduleModalOpen(true);
             }}
           >
@@ -40,7 +63,7 @@ const Dashboard = () => {
                 {category[1].map((tweet) => (
                   <TweetCard
                     key={tweet.id}
-                    scheduledTime={tweet.scheduledTime}
+                    localScheduledTime={tweet.localScheduledTime}
                     tweetContent={tweet.content}
                     followupTweets={tweet.followupTweets}
                   />
@@ -52,6 +75,8 @@ const Dashboard = () => {
       </div>
       <ScheduleTweetModal
         isOpen={scheduleModalOpen}
+        isEditing={false}
+        data={currentDraft!}
         handleClose={handleScheduleModalClose}
       />
     </div>
