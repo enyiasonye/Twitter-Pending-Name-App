@@ -6,11 +6,11 @@ import { ScheduledTweetPayload } from '../commonTypes';
 
 export const postNow = createAsyncThunk(
   'tweet/postNow',
-  async (tweet: ScheduledTweetPayload) => {
+  async (tweet: ScheduledTweetPayload, { rejectWithValue }) => {
     try {
-      return axios.post(`${BASE_URL}/tweet`, tweet);
+      await axios.post(`${BASE_URL}/tweet`, tweet);
     } catch (error) {
-      console.log(error);
+      return rejectWithValue(error.response.data);
     }
   },
 );
