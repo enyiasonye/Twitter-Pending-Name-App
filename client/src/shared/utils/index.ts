@@ -49,7 +49,7 @@ export const categorizeTweetSchedule = (tweets: ScheduledTweet[]) => {
 
   tweets.forEach((tweet) => {
     // if is today
-    if (isToday(tweet.scheduledTime)) {
+    if (isToday(tweet.localScheduledTime)) {
       // if today is a key, push
       if (organizedTweets.has('Today')) {
         organizedTweets.get('Today')?.push(tweet);
@@ -61,7 +61,7 @@ export const categorizeTweetSchedule = (tweets: ScheduledTweet[]) => {
       }
     }
     // if is tomorrow
-    if (isTomorrow(tweet.scheduledTime)) {
+    if (isTomorrow(tweet.localScheduledTime)) {
       // if tomorrow is a key, push
       if (organizedTweets.has('Tomorrow')) {
         organizedTweets.get('Tomorrow')?.push(tweet);
@@ -74,12 +74,12 @@ export const categorizeTweetSchedule = (tweets: ScheduledTweet[]) => {
     }
 
     // if converted date is key push
-    if (organizedTweets.has(convertDate(tweet.scheduledTime))) {
-      organizedTweets.get(convertDate(tweet.scheduledTime))?.push(tweet);
+    if (organizedTweets.has(convertDate(tweet.localScheduledTime))) {
+      organizedTweets.get(convertDate(tweet.localScheduledTime))?.push(tweet);
       return;
     } else {
       // declare new entry if not a key
-      organizedTweets.set(convertDate(tweet.scheduledTime), [tweet]);
+      organizedTweets.set(convertDate(tweet.localScheduledTime), [tweet]);
       return;
     }
   });
