@@ -1,0 +1,7 @@
+/* We have this separate css file because this input refuses to be overridden via styled components */
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused {
+  box-shadow: none !important;
+  border-color: #34d399 !important;
+  outline: 0;
+}

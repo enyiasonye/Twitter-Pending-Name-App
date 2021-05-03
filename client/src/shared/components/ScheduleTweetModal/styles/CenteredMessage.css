@@ -1,0 +1,5 @@
+/* because for some reason, it isn't already centered */
+.ant-message-custom-content {
+  display: flex;
+  align-items: center;
+}
