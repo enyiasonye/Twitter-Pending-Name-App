@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, ChangeEvent } from 'react';
-import { Input, Tooltip } from 'antd';
+import { Input, Tooltip, message } from 'antd';
 import {
   SmileOutlined,
   PictureOutlined,
@@ -9,9 +9,10 @@ import {
 } from '@ant-design/icons';
 import { Picker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
-import { useImmer } from 'use-immer';
 import UploadItem from './UploadItem';
-
+import tw, { styled } from 'twin.macro';
+import '../styles/CenteredMessage.css';
+import { TextAreaContent } from '../../../../store/commonTypes';
 const { TextArea } = Input;
 
 const getTextColor = (count: number) => {
@@ -51,9 +52,10 @@ const useOutsideAlerter = (ref, setIsEmojiOpen) => {
 
 interface ModalTextAreaProps {
   currentIndex: number;
-  value: string; // actual text content of textarea
+  value: TextAreaContent; // actual text content of textarea
   handleTextAreaClick: () => void;
   handleTextAreaChange: (currentValue: string) => void;
+  handleFileChange: (currentFileValue: { file: File; alt: string }[]) => void;
   showMinus: boolean;
   handleMinusClick: (currentIndex: number) => void;
   handlePlusClick: () => void;
@@ -64,13 +66,12 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
   value,
   handleTextAreaClick,
   handleTextAreaChange,
+  handleFileChange,
   showMinus = false,
   handleMinusClick,
   handlePlusClick,
 }) => {
   const [isEmojiOpen, setIsEmojiOpen] = useState(false);
-  const [files, setFiles] = useImmer<File[]>([]);
-
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -78,13 +79,35 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      Array.from(e.target.files).forEach((file) => {
-        setFiles((draft) => {
-          draft.push(file);
-        });
-      });
       console.log(e.target.files);
+      if (e.target.files.length <= 4) {
+        // temp array to hold upload items and add all at once
+        const temp: { file: File; alt: string }[] = [];
+        Array.from(e.target.files).forEach((file) => {
+          if (file.size > 5e6) {
+            message.error('Images must be 5MB or smaller');
+          } else {
+            temp.push({ file, alt: '' });
+          }
+        });
+        handleFileChange(temp);
+      } else {
+        message.error('A given tweet can only have 4 images at max');
+      }
+      // prevents issue where you cannot reupload first file
+      if (hiddenInputRef.current) hiddenInputRef.current.value = '';
     }
+  };
+
+  const uploadDisabled = () => {
+    // when gifs are implemented, it is either 4 images or one gif
+    // also implement image size limit
+    if (value.files.length >= 4) return true;
+    return false;
+  };
+
+  const handleFileDelete = (index: number) => {
+    handleFileChange(value.files.filter((_, idx) => idx !== index));
   };
 
   return (
@@ -104,18 +127,19 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
             ? 'Long text will automatically be turned into a thread!'
             : `Tweet #${currentIndex + 1}`
         }
-        value={value}
+        value={value.text}
       />
       <div className="p-1.5">
-        {files.map((file) => (
+        {value.files.map((file, index) => (
           <UploadItem
             placeholderText="Image description"
             file={file}
-            handleDelete={() => {}}
+            key={index}
+            handleDelete={() => handleFileDelete(index)}
           />
         ))}
       </div>
-      <div className="p-2 flex justify-between">
+      <div className="px-2 py-1 flex justify-between">
         <div className="flex items-center">
           <Tooltip title="Add emoji">
             <SmileOutlined
@@ -126,10 +150,10 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
             />
           </Tooltip>
           <Tooltip title="Add image">
-            <PictureOutlined
-              className="hover:text-emerald-500 cursor-pointer relative text-lg mx-2"
+            <StyledPictureIcon
+              disabled={uploadDisabled()}
               onClick={() => {
-                hiddenInputRef.current?.click();
+                !uploadDisabled() && hiddenInputRef.current?.click();
               }}
             />
             <input
@@ -149,7 +173,9 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
           </Tooltip>
         </div>
         <div className="flex items-baseline">
-          <div className={`${getTextColor(value.length)}`}>{value.length}</div>
+          <div className={`${getTextColor(value.text.length)}`}>
+            {value.text.length}
+          </div>
           {showMinus && (
             <Tooltip title="Remove tweet">
               <MinusOutlined
@@ -195,5 +221,13 @@ const ModalTextArea: React.FC<ModalTextAreaProps> = ({
     </div>
   );
 };
+
+const StyledPictureIcon = styled(PictureOutlined)`
+  ${tw`relative text-lg mx-2`}
+  ${(props: { disabled?: boolean }) =>
+    props.disabled ? tw`text-gray-300` : tw`hover:text-emerald-500`}
+  cursor: ${(props: { disabled?: boolean }) =>
+    props.disabled ? 'default' : 'pointer'} !important
+`;
 
 export default ModalTextArea;

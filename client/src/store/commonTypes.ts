@@ -33,14 +33,21 @@ export interface ScheduledTweet {
   id: string;
   userId: String;
   content: string[];
-  scheduledTime: string;
+  localScheduledTime: string;
+  utcScheduledTime: string;
+  posted: boolean;
   followupTweets: FollowupTweet[];
+}
+
+export interface TextAreaContent {
+  text: string;
+  files: { file: File; alt: string; url?: string; refPath?: string }[];
 }
 
 export interface ScheduledTweetPayload {
   id: string;
   userId: String;
-  content: string[];
+  content: TextAreaContent[];
   localScheduledTime: string;
   utcScheduledTime: string;
   posted: boolean;

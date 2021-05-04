@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 // @ts-ignore
 import TimezoneSelect from 'react-timezone-select';
 import styled from 'styled-components';
 import PrimaryButton from '../../shared/components/PrimaryButton';
 import { UserSettings } from '../../store/commonTypes';
-import { RootState } from '../../store/store';
+import { RootState, useAppDispatch } from '../../store/store';
 import isEqual from 'lodash/isEqual';
 import { updateSettings } from '../../store/thunks/userThunk';
 
@@ -15,7 +15,7 @@ const StyledContainer = styled.div`
 `;
 
 const AccountPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.auth.userProfile);
   const [canSave, setCanSave] = useState(false);
   const [currentSettings, setCurrentSettings] = useState<UserSettings>({

@@ -6,7 +6,7 @@ import FollowupTweetCard from '../FollowupTweetCard';
 import { extractConvertedTime } from '../../utils';
 
 export interface TweetCardProps {
-  scheduledTime: string;
+  localScheduledTime: string;
   tweetContent: string[];
   followupTweets: FollowupTweet[];
 }
@@ -57,7 +57,7 @@ const FormattedTweetContent = (tweetContent: string[]) => {
 };
 
 const TweetCard: React.FC<TweetCardProps> = ({
-  scheduledTime,
+  localScheduledTime,
   tweetContent,
   followupTweets,
 }) => {
@@ -69,7 +69,7 @@ const TweetCard: React.FC<TweetCardProps> = ({
         <div className="flex justify-between">
           <div>
             <div className="mb-2">
-              {CardTag(`@ ${extractConvertedTime(scheduledTime)}`)}
+              {CardTag(`@ ${extractConvertedTime(localScheduledTime)}`)}
             </div>
           </div>
           <div>

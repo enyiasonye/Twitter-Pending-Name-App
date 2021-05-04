@@ -3,9 +3,10 @@ import { Input } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import tw from 'twin.macro';
 import styled from 'styled-components';
+import '../styles/BasicInput.css';
 
 const BasicInput = styled(Input)`
-  ${tw`focus-within:border-emerald-400 focus:border-emerald-400 hover:border-emerald-400`}
+  ${tw`hover:border-emerald-400 mb-1`}
 `;
 
 const previewImage = (file: File) => (
@@ -14,7 +15,7 @@ const previewImage = (file: File) => (
 
 interface UploadItemProps {
   placeholderText: string;
-  file: File;
+  file: { file: File; alt: string };
   handleDelete: () => void;
 }
 
@@ -25,9 +26,10 @@ const UploadItem: React.FC<UploadItemProps> = ({
 }) => {
   return (
     <BasicInput
-      //   className="focus-within:border-emerald-400 focus:border-emerald-400 hover:border-emerald-400"
+      className="ant-input-affix-wrapper"
       placeholder={placeholderText}
-      prefix={previewImage(file)}
+      value={file.alt}
+      prefix={previewImage(file.file)}
       suffix={
         <CloseOutlined
           className="cursor-pointer"
