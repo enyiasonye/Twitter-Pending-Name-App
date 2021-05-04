@@ -3,6 +3,7 @@ import { ScheduledTweet, ScheduledTweetPayload, TagType } from '../commonTypes';
 
 interface TweetSliceState {
   scheduledTweets: ScheduledTweet[];
+  currentDraft: ScheduledTweet | null;
 }
 
 const today = new Date();
@@ -25,14 +26,17 @@ const initialState: TweetSliceState = {
         ullamcorper, augue justo maximus nullam.`,
         'testing 123 is a valid sentence but the man wont let you know that is the case',
       ],
-      scheduledTime: today.toString(),
+      localScheduledTime: today.toString(),
+      utcScheduledTime: today.toUTCString(),
       followupTweets: [],
+      posted: false,
     },
     {
       id: '2',
       userId: 'UHOWWoJj2wXwemEepfO6EsQGI112',
       content: ['This is a much shorter tweet that can still have followups'],
-      scheduledTime: tomorrow.toString(),
+      localScheduledTime: tomorrow.toString(),
+      utcScheduledTime: tomorrow.toUTCString(),
       followupTweets: [
         {
           id: '10',
@@ -43,25 +47,44 @@ const initialState: TweetSliceState = {
           ],
         },
       ],
+      posted: false,
     },
     {
       id: '3',
       userId: 'UHOWWoJj2wXwemEepfO6EsQGI112',
       content: ['This is a third tweet that is further in the future'],
-      scheduledTime: furtherDay.toString(),
+      localScheduledTime: furtherDay.toString(),
+      utcScheduledTime: furtherDay.toUTCString(),
       followupTweets: [],
+      posted: false,
     },
   ],
+  currentDraft: null,
 };
 
 const tweetSlice = createSlice({
   name: 'tweets',
   initialState,
   reducers: {
-    scheduleTweet(
+    updateCurrentDraft(
       state: TweetSliceState,
-      action: PayloadAction<ScheduledTweetPayload>,
-    ) {},
+      action: PayloadAction<ScheduledTweet>,
+    ) {
+      state.currentDraft = action.payload;
+    },
+    updateScheduledTweet(
+      state: TweetSliceState,
+      action: PayloadAction<ScheduledTweet>,
+    ) {
+      const selectedTweetIndex = state.scheduledTweets.findIndex(
+        (tweet) => tweet.id === action.payload.id,
+      );
+      state.scheduledTweets[selectedTweetIndex] = action.payload;
+    },
+    // scheduleTweet(
+    //   state: TweetSliceState,
+    //   action: PayloadAction<ScheduledTweetPayload>,
+    // ) {},
   },
   //   extraReducers: (builder) => {
   //     builder.addCase(setLoggedIn, (state, action) => {
@@ -77,5 +100,5 @@ const tweetSlice = createSlice({
   //   },
 });
 
-// export const { updateTweetDraft } = tweetSlice.actions;
+export const { updateCurrentDraft } = tweetSlice.actions;
 export default tweetSlice.reducer;
